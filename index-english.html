@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learn German - English Version</title>
+    <meta name="description" content="Interactive learning platform for German language with English translations - Special version for advanced learners">
+    <meta name="keywords" content="German learning, English, language, vocabulary, interactive, advanced">
+    <meta name="theme-color" content="#1d4ed8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Learn German">
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="assets/icon-192.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-slate-100 text-slate-800">
+
+    <!-- Main Container -->
+    <div id="app-container" class="max-w-6xl mx-auto p-4 md:p-8">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-blue-700">Learn German</h1>
+            <p class="text-slate-600 text-lg">Advanced Learning Platform - English Version</p>
+        </header>
+
+        <!-- Tutorial Modal -->
+        <div id="tutorial-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50">
+            <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-lg w-full text-center">
+                <h2 class="text-3xl font-bold mb-4 text-blue-700">Welcome!</h2>
+                <div class="text-left space-y-4 text-slate-700 mb-8">
+                    <p>This is an advanced German learning platform with two learning sections.</p>
+                    <p>
+                        <strong class="text-blue-600">Section 1 - Original Words:</strong>
+                        <br>Practice with the original categorized vocabulary in random order.
+                    </p>
+                    <p>
+                        <strong class="text-blue-600">Section 2 - New Words:</strong>
+                        <br>Learn new vocabulary specifically selected for advanced learners.
+                    </p>
+                    <p>
+                        <strong class="text-blue-600">Learning Mode:</strong>
+                        <br>Click on cards to see English translations. Click the speaker icons 🔊 to hear German pronunciation.
+                    </p>
+                    <p>
+                        <strong class="text-blue-600">Test Mode:</strong>
+                        <br>Test your knowledge with multiple choice questions. Words are marked as learned after 5 correct answers.
+                    </p>
+                </div>
+                <button id="start-button" class="bg-blue-600 text-white font-bold py-3 px-8 rounded-full text-lg hover:bg-blue-700 transition-colors shadow-lg">Start Learning</button>
+            </div>
+        </div>
+        
+        <!-- Section Selection -->
+        <div id="section-selection" class="mb-8">
+            <h2 class="text-2xl font-bold text-center mb-6">Choose Learning Section</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+                <button class="section-btn bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-all text-center border-2 border-transparent hover:border-blue-500" data-section="original">
+                    <div class="text-4xl mb-4">📚</div>
+                    <div class="font-semibold text-xl mb-2">Original Words</div>
+                    <div class="text-sm text-slate-500 mb-4">Practice with categorized vocabulary</div>
+                    <div class="text-xs text-slate-400">Food, Family, Colors, Clothing, Household</div>
+                </button>
+                <button class="section-btn bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-all text-center border-2 border-transparent hover:border-blue-500" data-section="new">
+                    <div class="text-4xl mb-4">🌟</div>
+                    <div class="font-semibold text-xl mb-2">New Words</div>
+                    <div class="text-sm text-slate-500 mb-4">Advanced vocabulary for special learners</div>
+                    <div class="text-xs text-slate-400">Transport, School, Shopping, Daily Life</div>
+                </button>
+            </div>
+        </div>
+
+        <!-- Category Selection -->
+        <div id="category-selection" class="mb-8 hidden">
+            <h2 class="text-2xl font-bold text-center mb-6">Choose Category</h2>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                <button class="category-btn bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition-all text-center" data-category="food">
+                    <div class="text-3xl mb-2">🍽️</div>
+                    <div class="font-semibold">Food</div>
+                    <div class="text-sm text-slate-500">Essen</div>
+                </button>
+                <button class="category-btn bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition-all text-center" data-category="household">
+                    <div class="text-3xl mb-2">🏠</div>
+                    <div class="font-semibold">Household</div>
+                    <div class="text-sm text-slate-500">Haushalt</div>
+                </button>
+                <button class="category-btn bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition-all text-center" data-category="transport">
+                    <div class="text-3xl mb-2">🚗</div>
+                    <div class="font-semibold">Transport</div>
+                    <div class="text-sm text-slate-500">Verkehr</div>
+                </button>
+                <button class="category-btn bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition-all text-center" data-category="school">
+                    <div class="text-3xl mb-2">🎓</div>
+                    <div class="font-semibold">School</div>
+                    <div class="text-sm text-slate-500">Schule</div>
+                </button>
+                <button class="category-btn bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition-all text-center" data-category="clothing">
+                    <div class="text-3xl mb-2">👕</div>
+                    <div class="font-semibold">Clothing</div>
+                    <div class="text-sm text-slate-500">Kleidung</div>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Progress Bar -->
+        <div id="progress-container" class="mb-6 hidden">
+            <div class="flex justify-between items-center mb-2">
+                <span class="text-sm font-medium text-slate-600">Progress</span>
+                <span id="progress-text" class="text-sm font-medium text-slate-600">0%</span>
+            </div>
+            <div class="w-full bg-slate-200 rounded-full h-2">
+                <div id="progress-bar" class="bg-blue-600 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+        </div>
+        
+        <!-- Mode Switcher -->
+        <div id="mode-switcher" class="flex justify-center mb-8 bg-slate-200 rounded-full p-1 max-w-sm mx-auto hidden">
+            <button id="learn-mode-btn" class="w-1/2 py-2 px-4 rounded-full font-semibold transition-colors btn-active">Learning Mode</button>
+            <button id="test-mode-btn" class="w-1/2 py-2 px-4 rounded-full font-semibold transition-colors">Test Mode</button>
+        </div>
+
+        <!-- Learn Mode Content -->
+        <div id="learn-mode">
+            <div id="word-cards" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                <!-- Word cards will be injected here by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Test Mode Content -->
+        <div id="test-mode" class="hidden">
+            <div class="bg-white p-6 rounded-2xl shadow-lg max-w-md mx-auto">
+                <div id="test-progress" class="text-right text-slate-500 font-semibold mb-4">Question 1 / 25</div>
+                <div class="text-center mb-6">
+                    <p class="text-slate-600 mb-1">What is this word?</p>
+                    <h2 id="test-word" class="text-4xl font-bold"></h2>
+                    <button id="test-audio-btn" class="mt-2 text-3xl text-blue-600 hover:text-blue-800 transition">🔊</button>
+                </div>
+                <div id="test-options" class="grid grid-cols-1 gap-3">
+                    <!-- Options will be injected here -->
+                </div>
+                <div id="test-feedback" class="mt-6 text-center font-bold h-6"></div>
+            </div>
+             <div id="test-results" class="hidden text-center bg-white p-8 rounded-2xl shadow-lg max-w-md mx-auto">
+                <h2 class="text-3xl font-bold mb-4">Test completed!</h2>
+                <p id="results-text" class="text-xl mb-6"></p>
+                <div class="flex gap-4 justify-center">
+                    <button id="restart-test-btn" class="bg-blue-600 text-white font-bold py-3 px-6 rounded-full hover:bg-blue-700 transition-colors">Start Again</button>
+                    <button id="back-to-sections-btn" class="bg-slate-600 text-white font-bold py-3 px-6 rounded-full hover:bg-slate-700 transition-colors">Back to Sections</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Panel -->
+        <div id="stats-panel" class="fixed bottom-4 right-4 bg-white p-4 rounded-xl shadow-lg hidden">
+            <h3 class="font-bold mb-2">Statistics</h3>
+            <div class="text-sm space-y-1">
+                <div>Learned Words: <span id="learned-words">0</span></div>
+                <div>Tests Passed: <span id="passed-tests">0</span></div>
+                <div>Best Score: <span id="best-score">0%</span></div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="js/app-english.js"></script>
+</body>
+</html>
