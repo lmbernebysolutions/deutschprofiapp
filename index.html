@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Baro Jarmalka (Deutsch Lernen)</title>
-    <meta name="description" content="Interaktive Lernplattform für deutsche Sprache mit somalischen Übersetzungen">
+    <title>Baro Jarmalka - Erweiterte Version (Deutsch Lernen)</title>
+    <meta name="description" content="Interaktive Lernplattform für deutsche Sprache mit somalischen Übersetzungen - Erweiterte Version mit Kategorien">
     <meta name="keywords" content="Deutsch lernen, Somali, Sprache, Vokabeln, Interaktiv">
     <meta name="theme-color" content="#1d4ed8">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -22,10 +22,10 @@
 <body class="bg-slate-100 text-slate-800">
 
     <!-- Main Container -->
-    <div id="app-container" class="max-w-4xl mx-auto p-4 md:p-8">
+    <div id="app-container" class="max-w-6xl mx-auto p-4 md:p-8">
         <header class="text-center mb-8">
             <h1 class="text-4xl font-bold text-blue-700">Baro Jarmalka</h1>
-            <p class="text-slate-600 text-lg">Deutsch Lernen</p>
+            <p class="text-slate-600 text-lg">Deutsch Lernen - Erweiterte Version</p>
         </header>
 
         <!-- Tutorial Modal -->
@@ -42,20 +42,67 @@
                         <strong class="text-blue-600">Habka Imtixaanka (Testmodus):</strong>
                         <br>Halkan waxaad isku tijaabin kartaa. Eray Jarmal ah ayaa lagu tusi doonaa. Dooro tarjumaadda Soomaaliga ee saxda ah afarta doorasho.
                     </p>
+                    <p>
+                        <strong class="text-blue-600">Kategoriyada (Kategorien):</strong>
+                        <br>Dooro kategoriya aad rabto inaad barato: Guriga, Cunto, Dhar, Qoyska, iyo Midabada.
+                    </p>
                 </div>
                 <button id="start-button" class="bg-blue-600 text-white font-bold py-3 px-8 rounded-full text-lg hover:bg-blue-700 transition-colors shadow-lg">Bilow (Start)</button>
             </div>
         </div>
         
+        <!-- Category Selection -->
+        <div id="category-selection" class="mb-8 hidden">
+            <h2 class="text-2xl font-bold text-center mb-6">Dooro Kategoriya / Wähle eine Kategorie</h2>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                <button class="category-btn bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition-all text-center" data-category="haushalt">
+                    <div class="text-3xl mb-2">🏠</div>
+                    <div class="font-semibold">Guriga</div>
+                    <div class="text-sm text-slate-500">Haushalt</div>
+                </button>
+                <button class="category-btn bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition-all text-center" data-category="essen">
+                    <div class="text-3xl mb-2">🍽️</div>
+                    <div class="font-semibold">Cunto</div>
+                    <div class="text-sm text-slate-500">Essen</div>
+                </button>
+                <button class="category-btn bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition-all text-center" data-category="kleidung">
+                    <div class="text-3xl mb-2">👕</div>
+                    <div class="font-semibold">Dhar</div>
+                    <div class="text-sm text-slate-500">Kleidung</div>
+                </button>
+                <button class="category-btn bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition-all text-center" data-category="familie">
+                    <div class="text-3xl mb-2">👨‍👩‍👧‍👦</div>
+                    <div class="font-semibold">Qoyska</div>
+                    <div class="text-sm text-slate-500">Familie</div>
+                </button>
+                <button class="category-btn bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition-all text-center" data-category="farben">
+                    <div class="text-3xl mb-2">🎨</div>
+                    <div class="font-semibold">Midabada</div>
+                    <div class="text-sm text-slate-500">Farben</div>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Progress Bar -->
+        <div id="progress-container" class="mb-6 hidden">
+            <div class="flex justify-between items-center mb-2">
+                <span class="text-sm font-medium text-slate-600">Fortschritt / Horumar</span>
+                <span id="progress-text" class="text-sm font-medium text-slate-600">0%</span>
+            </div>
+            <div class="w-full bg-slate-200 rounded-full h-2">
+                <div id="progress-bar" class="bg-blue-600 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+        </div>
+        
         <!-- Mode Switcher -->
-        <div class="flex justify-center mb-8 bg-slate-200 rounded-full p-1 max-w-sm mx-auto">
+        <div id="mode-switcher" class="flex justify-center mb-8 bg-slate-200 rounded-full p-1 max-w-sm mx-auto hidden">
             <button id="learn-mode-btn" class="w-1/2 py-2 px-4 rounded-full font-semibold transition-colors btn-active">Lernmodus</button>
             <button id="test-mode-btn" class="w-1/2 py-2 px-4 rounded-full font-semibold transition-colors">Testmodus</button>
         </div>
 
         <!-- Learn Mode Content -->
         <div id="learn-mode">
-            <div id="word-cards" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+            <div id="word-cards" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                 <!-- Word cards will be injected here by JavaScript -->
             </div>
         </div>
@@ -77,13 +124,27 @@
              <div id="test-results" class="hidden text-center bg-white p-8 rounded-2xl shadow-lg max-w-md mx-auto">
                 <h2 class="text-3xl font-bold mb-4">Imtixaankii waa dhammaaday!</h2>
                 <p id="results-text" class="text-xl mb-6"></p>
-                <button id="restart-test-btn" class="bg-blue-600 text-white font-bold py-3 px-6 rounded-full hover:bg-blue-700 transition-colors">Mar kale bilow</button>
+                <div class="flex gap-4 justify-center">
+                    <button id="restart-test-btn" class="bg-blue-600 text-white font-bold py-3 px-6 rounded-full hover:bg-blue-700 transition-colors">Mar kale bilow</button>
+                    <button id="back-to-categories-btn" class="bg-slate-600 text-white font-bold py-3 px-6 rounded-full hover:bg-slate-700 transition-colors">Kategoriyada</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Panel -->
+        <div id="stats-panel" class="fixed bottom-4 right-4 bg-white p-4 rounded-xl shadow-lg hidden">
+            <h3 class="font-bold mb-2">Statistiken</h3>
+            <div class="text-sm space-y-1">
+                <div>Gelernte Wörter: <span id="learned-words">0</span></div>
+                <div>Tests bestanden: <span id="passed-tests">0</span></div>
+                <div>Beste Punktzahl: <span id="best-score">0%</span></div>
             </div>
         </div>
 
     </div>
 
-    <script src="js/app.js"></script>
+    <script src="js/vocabulary.js"></script>
+    <script src="js/app-advanced.js"></script>
     <script>
         // Service Worker Registration
         if ('serviceWorker' in navigator) {
@@ -97,6 +158,23 @@
                     });
             });
         }
+        
+        // Debug: Start Button Event Listener
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('DOM loaded, initializing start button...');
+            const startBtn = document.getElementById('start-button');
+            if (startBtn) {
+                console.log('Start button found, adding event listener...');
+                startBtn.addEventListener('click', () => {
+                    console.log('Start button clicked!');
+                    document.getElementById('tutorial-modal').style.display = 'none';
+                    // Show category selection
+                    document.getElementById('category-selection').classList.remove('hidden');
+                });
+            } else {
+                console.error('Start button not found!');
+            }
+        });
     </script>
 </body>
 </html>
