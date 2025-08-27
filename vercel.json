@@ -22,6 +22,9 @@
       "use": "@vercel/static"
     }
   ],
+  "deploymentProtection": {
+    "enabled": false
+  },
   "headers": [
     {
       "source": "/js/(.*)",
