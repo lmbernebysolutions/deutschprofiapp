@@ -143,9 +143,560 @@
 
     </div>
 
-    <script src="js/vocabulary.js"></script>
-    <script src="js/app-advanced.js"></script>
     <script>
+        // Erweiterte Vokabeldaten mit Kategorien
+        const vocabularyCategories = {
+            haushalt: {
+                name: "Haushalt",
+                somali: "Guriga",
+                words: [
+                    { german: 'Toilette', somali: 'Musqul' },
+                    { german: 'Sessel', somali: 'Kursi gacan leh' },
+                    { german: 'Sofa', somali: 'Fadhi' },
+                    { german: 'Treppe', somali: 'Jaranjaro' },
+                    { german: 'Regal', somali: 'Raf' },
+                    { german: 'Kissen', somali: 'Barkin' },
+                    { german: 'Seife', somali: 'Saabuun' },
+                    { german: 'Handtuch', somali: 'Tuwaal' },
+                    { german: 'Dach', somali: 'Saqaf' },
+                    { german: 'Fenster', somali: 'Daaqad' },
+                    { german: 'Schlafzimmer', somali: 'Qolka jiifka' },
+                    { german: 'Bett', somali: 'Sariir' },
+                    { german: 'Bettdecke', somali: 'Gogosha sariirta' },
+                    { german: 'Kühlschrank', somali: 'Talaagad' },
+                    { german: 'Mülleimer', somali: 'Qashin-qub' },
+                    { german: 'Keller', somali: 'Maqaasiin' },
+                    { german: 'Herd', somali: 'Foorno' },
+                    { german: 'Fernseher', somali: 'Telefishin' },
+                    { german: 'fernsehen', somali: 'daawashada TV-ga' },
+                    { german: 'Schrank', somali: 'Armaajo' },
+                    { german: 'Badewanne', somali: 'Biyo-qubeys' },
+                    { german: 'Dusche', somali: 'Qubeys' },
+                    { german: 'Zähne putzen', somali: 'Cadeysasho' },
+                    { german: 'Zahnbürste', somali: 'Cadey' },
+                    { german: 'Zahnpasta', somali: 'Dawaynta ilkaha' }
+                ]
+            },
+            essen: {
+                name: "Essen & Trinken",
+                somali: "Cunto iyo Cabitaan",
+                words: [
+                    { german: 'Brot', somali: 'Rooti' },
+                    { german: 'Wasser', somali: 'Biyo' },
+                    { german: 'Milch', somali: 'Caano' },
+                    { german: 'Käse', somali: 'Kees' },
+                    { german: 'Fleisch', somali: 'Hilib' },
+                    { german: 'Gemüse', somali: 'Khudaar' },
+                    { german: 'Obst', somali: 'Miro' },
+                    { german: 'Kaffee', somali: 'Qaxwo' },
+                    { german: 'Tee', somali: 'Shaah' },
+                    { german: 'Zucker', somali: 'Sonkor' },
+                    { german: 'Salz', somali: 'Cusbo' },
+                    { german: 'Öl', somali: 'Salid' }
+                ]
+            },
+            kleidung: {
+                name: "Kleidung",
+                somali: "Dhar",
+                words: [
+                    { german: 'Hose', somali: 'Surwaal' },
+                    { german: 'Hemd', somali: 'Shaad' },
+                    { german: 'Schuhe', somali: 'Kabaha' },
+                    { german: 'Jacke', somali: 'Jaakad' },
+                    { german: 'Mütze', somali: 'Koofiyad' },
+                    { german: 'Socken', somali: 'Shariid' },
+                    { german: 'Unterwäsche', somali: 'Shaqsi' },
+                    { german: 'Rock', somali: 'Guntiino' },
+                    { german: 'Kleid', somali: 'Guntiino' },
+                    { german: 'Gürtel', somali: 'Suun' }
+                ]
+            },
+            familie: {
+                name: "Familie",
+                somali: "Qoyska",
+                words: [
+                    { german: 'Mutter', somali: 'Hooyo' },
+                    { german: 'Vater', somali: 'Aabbe' },
+                    { german: 'Sohn', somali: 'Wiil' },
+                    { german: 'Tochter', somali: 'Gabar' },
+                    { german: 'Bruder', somali: 'Walaal' },
+                    { german: 'Schwester', somali: 'Walaasha' },
+                    { german: 'Großmutter', somali: 'Ayeeyo' },
+                    { german: 'Großvater', somali: 'Awoowe' },
+                    { german: 'Onkel', somali: 'Adeer' },
+                    { german: 'Tante', somali: 'Eedo' }
+                ]
+            },
+            farben: {
+                name: "Farben",
+                somali: "Midabada",
+                words: [
+                    { german: 'Rot', somali: 'Guduud' },
+                    { german: 'Blau', somali: 'Buluug' },
+                    { german: 'Grün', somali: 'Cagaar' },
+                    { german: 'Gelb', somali: 'Jaalle' },
+                    { german: 'Schwarz', somali: 'Madow' },
+                    { german: 'Weiß', somali: 'Cadaan' },
+                    { german: 'Braun', somali: 'Bunni' },
+                    { german: 'Grau', somali: 'Grey' },
+                    { german: 'Orange', somali: 'Orange' },
+                    { german: 'Lila', somali: 'Purple' }
+                ]
+            }
+        };
+
+        // Alle Vokabeln in einem Array für Kompatibilität
+        const allVocabulary = Object.values(vocabularyCategories).flatMap(category => category.words);
+
+        // --- STATE ---
+        let currentTestIndex = 0;
+        let score = 0;
+        let shuffledVocab = [];
+        let currentMode = 'learn';
+        let currentCategory = 'haushalt';
+        let learnedWords = new Set();
+        let testHistory = [];
+        let currentVocabulary = [];
+
+        // --- TEXT-TO-SPEECH ---
+        let currentSpeechRate = 0.8; // Langsamere Standardgeschwindigkeit
+
+        function speak(text, speed = 'normal') {
+            if (!window.speechSynthesis) {
+                alert("Nidaamka codku kama shaqeynayo biraawsarkan. Fadlan isku day biraawsar kale sida Chrome ama Firefox.");
+                return;
+            }
+            
+            // Cancel any ongoing speech
+            window.speechSynthesis.cancel();
+            
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'de-DE';
+            
+            // Geschwindigkeit einstellen
+            if (speed === 'slow') {
+                utterance.rate = 0.6; // Sehr langsam
+                currentSpeechRate = 0.6;
+            } else {
+                utterance.rate = 0.9; // Normal
+                currentSpeechRate = 0.9;
+            }
+            
+            utterance.pitch = 0.8; // Etwas tiefer für männlichere Stimme
+            utterance.volume = 1.0;
+            
+            // Beste männliche deutsche Stimme auswählen
+            const voices = window.speechSynthesis.getVoices();
+            let bestVoice = null;
+            
+            // Priorität: Deutsche männliche Stimmen
+            bestVoice = voices.find(voice => 
+                voice.lang.startsWith('de') && 
+                (voice.name.includes('Male') || voice.name.includes('männlich') || voice.name.includes('male'))
+            );
+            
+            // Fallback: Deutsche Stimme
+            if (!bestVoice) {
+                bestVoice = voices.find(voice => voice.lang.startsWith('de'));
+            }
+            
+            // Fallback: Englische männliche Stimme
+            if (!bestVoice) {
+                bestVoice = voices.find(voice => 
+                    voice.lang.startsWith('en') && 
+                    (voice.name.includes('Male') || voice.name.includes('male'))
+                );
+            }
+            
+            if (bestVoice) {
+                utterance.voice = bestVoice;
+            }
+            
+            window.speechSynthesis.speak(utterance);
+        }
+
+        function speakSlow(text) {
+            speak(text, 'slow');
+        }
+
+        function speakNormal(text) {
+            speak(text, 'normal');
+        }
+
+        // --- CATEGORY MANAGEMENT ---
+        function selectCategory(category) {
+            currentCategory = category;
+            currentVocabulary = vocabularyCategories[category].words;
+            
+            // Update UI
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('bg-blue-100', 'border-blue-500');
+                btn.classList.add('bg-white');
+            });
+            
+            const selectedBtn = document.querySelector(`[data-category="${category}"]`);
+            selectedBtn.classList.remove('bg-white');
+            selectedBtn.classList.add('bg-blue-100', 'border-blue-500');
+            
+            // Show progress and mode switcher
+            document.getElementById('category-selection').classList.add('hidden');
+            document.getElementById('progress-container').classList.remove('hidden');
+            document.getElementById('mode-switcher').classList.remove('hidden');
+            
+            // Load vocabulary for current mode
+            if (currentMode === 'learn') {
+                createLearnCards();
+            } else {
+                startTest();
+            }
+            
+            updateProgress();
+        }
+
+        function showCategorySelection() {
+            document.getElementById('category-selection').classList.remove('hidden');
+            document.getElementById('progress-container').classList.add('hidden');
+            document.getElementById('mode-switcher').classList.add('hidden');
+            document.getElementById('learn-mode').classList.add('hidden');
+            document.getElementById('test-mode').classList.add('hidden');
+        }
+
+        // --- PROGRESS TRACKING ---
+        function updateProgress() {
+            const totalWords = currentVocabulary.length;
+            const learnedCount = Array.from(learnedWords).filter(word => 
+                currentVocabulary.some(v => v.german === word)
+            ).length;
+            
+            const percentage = Math.round((learnedCount / totalWords) * 100);
+            
+            document.getElementById('progress-bar').style.width = `${percentage}%`;
+            document.getElementById('progress-text').textContent = `${percentage}%`;
+            
+            // Update stats
+            document.getElementById('learned-words').textContent = learnedWords.size;
+            document.getElementById('passed-tests').textContent = testHistory.length;
+            
+            const bestScore = testHistory.length > 0 ? Math.max(...testHistory.map(t => t.score)) : 0;
+            document.getElementById('best-score').textContent = `${bestScore}%`;
+        }
+
+        // --- LEARN MODE ---
+        function createLearnCards() {
+            const wordCardsContainer = document.getElementById('word-cards');
+            wordCardsContainer.innerHTML = '';
+            
+            currentVocabulary.forEach((word, index) => {
+                const cardContainer = document.createElement('div');
+                cardContainer.className = 'perspective-1000 fade-in';
+                cardContainer.style.animationDelay = `${index * 0.05}s`;
+
+                const card = document.createElement('div');
+                card.className = 'card relative w-full h-32 md:h-36 cursor-pointer';
+                
+                const isLearned = learnedWords.has(word.german);
+                const learnedClass = isLearned ? 'ring-2 ring-green-500' : '';
+                
+                // Front face (German)
+                const frontFace = document.createElement('div');
+                frontFace.className = `card-face absolute w-full h-full bg-white rounded-xl shadow-md flex flex-col items-center justify-center p-2 text-center ${learnedClass}`;
+                frontFace.innerHTML = `
+                    <p class="text-lg md:text-xl font-semibold">${word.german}</p>
+                    <div class="flex gap-1 mt-1">
+                        <button class="speak-slow-btn text-xl text-green-500 hover:text-green-700 transition" aria-label="Maqal si tartiib ah ${word.german}" title="Langsam">🐌</button>
+                        <button class="speak-normal-btn text-xl text-blue-500 hover:text-blue-700 transition" aria-label="Maqal caadi ah ${word.german}" title="Normal">🔊</button>
+                    </div>
+                    ${isLearned ? '<div class="text-green-500 text-sm mt-1">✓ Gelernt</div>' : ''}
+                `;
+                
+                // Back face (Somali)
+                const backFace = document.createElement('div');
+                backFace.className = 'card-face card-face-back absolute w-full h-full bg-blue-600 text-white rounded-xl shadow-md flex items-center justify-center p-2 text-center';
+                backFace.innerHTML = `<p class="text-lg md:text-xl font-semibold">${word.somali}</p>`;
+
+                card.appendChild(frontFace);
+                card.appendChild(backFace);
+                cardContainer.appendChild(card);
+                wordCardsContainer.appendChild(cardContainer);
+
+                // Event Listeners for card
+                card.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('speak-slow-btn')) {
+                        e.stopPropagation();
+                        speakSlow(word.german);
+                    } else if (e.target.classList.contains('speak-normal-btn')) {
+                        e.stopPropagation();
+                        speakNormal(word.german);
+                    } else {
+                        card.classList.toggle('is-flipped');
+                        // Mark as learned when flipped
+                        if (card.classList.contains('is-flipped')) {
+                            learnedWords.add(word.german);
+                            updateProgress();
+                            saveProgress();
+                        }
+                    }
+                });
+                
+                // Keyboard accessibility
+                card.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        card.classList.toggle('is-flipped');
+                        if (card.classList.contains('is-flipped')) {
+                            learnedWords.add(word.german);
+                            updateProgress();
+                            saveProgress();
+                        }
+                    }
+                });
+            });
+        }
+
+        // --- TEST MODE ---
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[i], shuffled[j]];
+            }
+            return shuffled;
+        }
+
+        function startTest() {
+            currentTestIndex = 0;
+            score = 0;
+            shuffledVocab = shuffleArray([...currentVocabulary]);
+            document.getElementById('test-results').classList.add('hidden');
+            document.querySelector('#test-mode .bg-white').style.display = 'block';
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            if (currentTestIndex >= shuffledVocab.length) {
+                showResults();
+                return;
+            }
+
+            document.getElementById('test-progress').textContent = `Su'aal ${currentTestIndex + 1} / ${shuffledVocab.length}`;
+            const currentWord = shuffledVocab[currentTestIndex];
+            document.getElementById('test-word').textContent = currentWord.german;
+            document.getElementById('test-feedback').textContent = '';
+
+            // Get options
+            const correctAnswer = currentWord.somali;
+            let options = [correctAnswer];
+            
+            // Get 3 random wrong answers from all categories
+            const allWords = Object.values(vocabularyCategories).flatMap(cat => cat.words);
+            const wrongAnswers = allWords
+                .filter(v => v.somali !== correctAnswer)
+                .map(v => v.somali);
+            
+            shuffleArray(wrongAnswers);
+            options.push(...wrongAnswers.slice(0, 3));
+            
+            // Shuffle the final options
+            options = shuffleArray(options);
+
+            // Display options
+            const testOptionsContainer = document.getElementById('test-options');
+            testOptionsContainer.innerHTML = '';
+            options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.className = 'w-full text-left bg-slate-100 p-4 rounded-lg hover:bg-slate-200 transition-colors font-medium focus:outline-none focus:ring-2 focus:ring-blue-500';
+                button.textContent = option;
+                button.setAttribute('aria-label', `Doorasho ${index + 1}: ${option}`);
+                button.onclick = () => checkAnswer(option, correctAnswer, button);
+                testOptionsContainer.appendChild(button);
+            });
+        }
+
+        function checkAnswer(selectedAnswer, correctAnswer, button) {
+            const buttons = document.querySelectorAll('#test-options button');
+            buttons.forEach(btn => {
+                btn.disabled = true;
+                btn.classList.remove('hover:bg-slate-200');
+            });
+
+            if (selectedAnswer === correctAnswer) {
+                score++;
+                document.getElementById('test-feedback').textContent = 'Sax! 👍';
+                document.getElementById('test-feedback').className = 'mt-6 text-center font-bold h-6 text-green-600';
+                button.classList.remove('bg-slate-100');
+                button.classList.add('bg-green-500', 'text-white');
+            } else {
+                document.getElementById('test-feedback').textContent = 'Khalad! 👎';
+                document.getElementById('test-feedback').className = 'mt-6 text-center font-bold h-6 text-red-600';
+                button.classList.remove('bg-slate-100');
+                button.classList.add('bg-red-500', 'text-white');
+                
+                buttons.forEach(btn => {
+                    if (btn.textContent === correctAnswer) {
+                        btn.classList.remove('bg-slate-100');
+                        btn.classList.add('bg-green-500', 'text-white');
+                    }
+                });
+            }
+
+            currentTestIndex++;
+            setTimeout(loadQuestion, 1500);
+        }
+
+        function showResults() {
+            document.querySelector('#test-mode .bg-white').style.display = 'none';
+            document.getElementById('test-results').classList.remove('hidden');
+            
+            const percentage = Math.round((score / shuffledVocab.length) * 100);
+            
+            // Save test result
+            testHistory.push({
+                category: currentCategory,
+                score: percentage,
+                date: new Date().toISOString(),
+                totalQuestions: shuffledVocab.length,
+                correctAnswers: score
+            });
+            
+            let resultMessage = '';
+            
+            if (percentage >= 90) {
+                resultMessage = `Waxa aad si sax ah uga jawaabtay ${score} ka mid ah ${shuffledVocab.length} su'aalood. Waad mahadsantahay! 🎉`;
+            } else if (percentage >= 70) {
+                resultMessage = `Waxa aad si sax ah uga jawaabtay ${score} ka mid ah ${shuffledVocab.length} su'aalood. Waa wanaagsan! 👍`;
+            } else if (percentage >= 50) {
+                resultMessage = `Waxa aad si sax ah uga jawaabtay ${score} ka mid ah ${shuffledVocab.length} su'aalood. Siyaad baro! 📚`;
+            } else {
+                resultMessage = `Waxa aad si sax ah uga jawaabtay ${score} ka mid ah ${shuffledVocab.length} su'aalood. Siyaad isku day! 💪`;
+            }
+            
+            document.getElementById('results-text').textContent = resultMessage;
+            
+            // Mark words as learned based on test performance
+            shuffledVocab.forEach(word => {
+                if (percentage >= 70) {
+                    learnedWords.add(word.german);
+                }
+            });
+            
+            updateProgress();
+            saveProgress();
+        }
+
+        // --- MODE SWITCHING ---
+        function switchMode(mode) {
+            currentMode = mode;
+            
+            if (mode === 'learn') {
+                document.getElementById('learn-mode').classList.remove('hidden');
+                document.getElementById('test-mode').classList.add('hidden');
+                document.getElementById('learn-mode-btn').classList.add('btn-active');
+                document.getElementById('test-mode-btn').classList.remove('btn-active');
+                
+                if (currentVocabulary.length > 0) {
+                    createLearnCards();
+                }
+            } else {
+                document.getElementById('learn-mode').classList.add('hidden');
+                document.getElementById('test-mode').classList.remove('hidden');
+                document.getElementById('learn-mode-btn').classList.remove('btn-active');
+                document.getElementById('test-mode-btn').classList.add('btn-active');
+                
+                if (currentVocabulary.length > 0) {
+                    startTest();
+                }
+            }
+        }
+
+        // --- UTILITY FUNCTIONS ---
+        function saveProgress() {
+            const progress = {
+                mode: currentMode,
+                category: currentCategory,
+                learnedWords: Array.from(learnedWords),
+                testHistory: testHistory,
+                lastPlayed: new Date().toISOString()
+            };
+            localStorage.setItem('baroJarmalkaProgress', JSON.stringify(progress));
+        }
+
+        function loadProgress() {
+            const saved = localStorage.getItem('baroJarmalkaProgress');
+            if (saved) {
+                try {
+                    const progress = JSON.parse(saved);
+                    currentMode = progress.mode || 'learn';
+                    currentCategory = progress.category || 'haushalt';
+                    learnedWords = new Set(progress.learnedWords || []);
+                    testHistory = progress.testHistory || [];
+                    currentVocabulary = vocabularyCategories[currentCategory].words;
+                    return progress;
+                } catch (e) {
+                    console.error('Error loading progress:', e);
+                }
+            }
+            return null;
+        }
+
+        // --- EVENT LISTENERS ---
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('DOM loaded, initializing application...');
+            
+            // Initialize speech synthesis
+            if (window.speechSynthesis) {
+                window.speechSynthesis.onvoiceschanged = () => {
+                    console.log('Speech synthesis voices available');
+                };
+            }
+            
+            // Start button event listener
+            const startBtn = document.getElementById('start-button');
+            if (startBtn) {
+                console.log('Start button found, adding event listener...');
+                startBtn.addEventListener('click', () => {
+                    console.log('Start button clicked!');
+                    document.getElementById('tutorial-modal').style.display = 'none';
+                    document.getElementById('category-selection').classList.remove('hidden');
+                });
+            } else {
+                console.error('Start button not found!');
+            }
+            
+            // Category selection
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const category = btn.dataset.category;
+                    selectCategory(category);
+                });
+            });
+            
+            // Mode switching
+            document.getElementById('learn-mode-btn').addEventListener('click', () => switchMode('learn'));
+            document.getElementById('test-mode-btn').addEventListener('click', () => switchMode('test'));
+            
+            // Test audio button
+            document.getElementById('test-audio-btn').addEventListener('click', () => {
+                if (shuffledVocab[currentTestIndex]) {
+                    speakNormal(shuffledVocab[currentTestIndex].german);
+                }
+            });
+            
+            // Test buttons
+            document.getElementById('restart-test-btn').addEventListener('click', startTest);
+            document.getElementById('back-to-categories-btn').addEventListener('click', showCategorySelection);
+            
+            // Show stats panel
+            document.getElementById('stats-panel').classList.remove('hidden');
+            
+            // Load saved progress
+            const progress = loadProgress();
+            if (progress && progress.category) {
+                selectCategory(progress.category);
+            }
+            
+            console.log('Application initialized successfully!');
+        });
+
         // Service Worker Registration
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
@@ -158,23 +709,6 @@
                     });
             });
         }
-        
-        // Debug: Start Button Event Listener
-        document.addEventListener('DOMContentLoaded', () => {
-            console.log('DOM loaded, initializing start button...');
-            const startBtn = document.getElementById('start-button');
-            if (startBtn) {
-                console.log('Start button found, adding event listener...');
-                startBtn.addEventListener('click', () => {
-                    console.log('Start button clicked!');
-                    document.getElementById('tutorial-modal').style.display = 'none';
-                    // Show category selection
-                    document.getElementById('category-selection').classList.remove('hidden');
-                });
-            } else {
-                console.error('Start button not found!');
-            }
-        });
     </script>
 </body>
 </html>
