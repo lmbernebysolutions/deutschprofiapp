@@ -102,40 +102,47 @@ const vocabularyData = {
                 { german: 'Saft', english: 'Juice' },
                 { german: 'Süßigkeit', english: 'Candy' },
                 { german: 'Gurke', english: 'Cucumber' },
-                { german: 'Obst', english: 'Fruit' },
-                { german: 'Gemüse', english: 'Vegetables' },
                 { german: 'Hähnchenfleisch', english: 'Chicken meat' },
                 { german: 'Zitrone', english: 'Lemon' },
-                { german: 'Orange', english: 'Orange' },
                 { german: 'Birne', english: 'Pear' },
                 { german: 'Topf', english: 'Pot' },
                 { german: 'Rindfleisch', english: 'Beef' },
                 { german: 'Paprika', english: 'Bell pepper' },
                 { german: 'Weintraube', english: 'Grape' },
-                { german: 'Käse', english: 'Cheese' },
-                { german: 'Wurst', english: 'Sausage' }
+                { german: 'Wurst', english: 'Sausage' },
+                { german: 'Schokolade', english: 'Chocolate' },
+                { german: 'Kuchen', english: 'Cake' },
+                { german: 'Suppe', english: 'Soup' },
+                { german: 'Salat', english: 'Salad' },
+                { german: 'Kartoffel', english: 'Potato' },
+                { german: 'Tomate', english: 'Tomato' },
+                { german: 'Apfel', english: 'Apple' },
+                { german: 'Banane', english: 'Banana' }
             ]
         },
         household: {
             name: "Household",
             words: [
-                { german: 'Kissen', english: 'Pillow' },
                 { german: 'Hände waschen', english: 'to wash hands' },
-                { german: 'Zähne putzen', english: 'to brush teeth' },
-                { german: 'Treppe', english: 'Stairs' },
-                { german: 'Regal', english: 'Shelf' },
-                { german: 'Fernseher', english: 'Television' },
-                { german: 'Seife', english: 'Soap' },
-                { german: 'Dach', english: 'Roof' },
-                { german: 'Keller', english: 'Basement' },
-                { german: 'Sessel', english: 'Armchair' },
-                { german: 'Zahnbürste', english: 'Toothbrush' },
-                { german: 'Mülleimer', english: 'Trash can' },
-                { german: 'Fenster', english: 'Window' },
                 { german: 'Waschbecken', english: 'Sink' },
                 { german: 'Spiegel', english: 'Mirror' },
-                { german: 'Kühlschrank', english: 'Refrigerator' },
-                { german: 'Schlafzimmer', english: 'Bedroom' }
+                { german: 'Schlüssel', english: 'Key' },
+                { german: 'Lampe', english: 'Lamp' },
+                { german: 'Tisch', english: 'Table' },
+                { german: 'Stuhl', english: 'Chair' },
+                { german: 'Teppich', english: 'Carpet' },
+                { german: 'Vorhang', english: 'Curtain' },
+                { german: 'Buch', english: 'Book' },
+                { german: 'Zeitung', english: 'Newspaper' },
+                { german: 'Telefon', english: 'Telephone' },
+                { german: 'Computer', english: 'Computer' },
+                { german: 'Steckdose', english: 'Power outlet' },
+                { german: 'Glühbirne', english: 'Light bulb' },
+                { german: 'Batterie', english: 'Battery' },
+                { german: 'Schraubenzieher', english: 'Screwdriver' },
+                { german: 'Hammer', english: 'Hammer' },
+                { german: 'Nagel', english: 'Nail' },
+                { german: 'Kleber', english: 'Glue' }
             ]
         },
         transport: {
@@ -164,14 +171,24 @@ const vocabularyData = {
                 { german: 'Post', english: 'Post office' },
                 { german: 'Bibliothek', english: 'Library' },
                 { german: 'billig', english: 'cheap' },
-                { german: 'teuer', english: 'expensive' }
+                { german: 'teuer', english: 'expensive' },
+                { german: 'Fahrrad', english: 'Bicycle' },
+                { german: 'Motorrad', english: 'Motorcycle' },
+                { german: 'Taxi', english: 'Taxi' },
+                { german: 'U-Bahn', english: 'Subway' },
+                { german: 'Hafen', english: 'Harbor' },
+                { german: 'Schiff', english: 'Ship' },
+                { german: 'Brücke', english: 'Bridge' },
+                { german: 'Tunnel', english: 'Tunnel' },
+                { german: 'Parkplatz', english: 'Parking lot' },
+                { german: 'Ampel', english: 'Traffic light' },
+                { german: 'Straßenschild', english: 'Street sign' }
             ]
         },
         school: {
             name: "School & Office",
             words: [
                 { german: 'Schere', english: 'Scissors' },
-                { german: 'Kleber', english: 'Glue' },
                 { german: 'Bleistift', english: 'Pencil' },
                 { german: 'Radiergummi', english: 'Eraser' },
                 { german: 'Kugelschreiber', english: 'Pen' },
@@ -185,16 +202,6 @@ const vocabularyData = {
                 { german: 'Zirkel', english: 'Compass' },
                 { german: 'Sportplatz', english: 'Sports field' },
                 { german: 'Turnhalle', english: 'Gym' },
-                { german: 'Kleid', english: 'Dress' },
-                { german: 'Stiefel', english: 'Boots' },
-                { german: 'Sandale', english: 'Sandals' },
-                { german: 'Gürtel', english: 'Belt' },
-                { german: 'Kopftuch', english: 'Headscarf' },
-                { german: 'Tasche', english: 'Bag' },
-                { german: 'Schal', english: 'Scarf' },
-                { german: 'Mütze', english: 'Hat' },
-                { german: 'Handschuh', english: 'Gloves' },
-                { german: 'Unterhemd', english: 'Undershirt' },
                 { german: 'Buntstift', english: 'Colored pencil' },
                 { german: 'Filzstift', english: 'Marker' },
                 { german: 'Geodreieck', english: 'Set square' },
@@ -204,7 +211,66 @@ const vocabularyData = {
                 { german: 'Schüler', english: 'Student' },
                 { german: 'Freund', english: 'Friend' },
                 { german: 'Tafel', english: 'Blackboard' },
-                { german: 'Kreide', english: 'Chalk' }
+                { german: 'Kreide', english: 'Chalk' },
+                { german: 'Schultasche', english: 'School bag' },
+                { german: 'Heft', english: 'Notebook' },
+                { german: 'Bleistiftspitzer', english: 'Pencil sharpener' },
+                { german: 'Klebestift', english: 'Glue stick' },
+                { german: 'Pinsel', english: 'Paintbrush' },
+                { german: 'Farbe', english: 'Paint' },
+                { german: 'Papier', english: 'Paper' },
+                { german: 'Buch', english: 'Book' },
+                { german: 'Bibliothek', english: 'Library' },
+                { german: 'Schulhof', english: 'Schoolyard' },
+                { german: 'Kantine', english: 'Cafeteria' },
+                { german: 'Direktor', english: 'Principal' },
+                { german: 'Sekretärin', english: 'Secretary' }
+            ]
+        },
+        clothing: {
+            name: "Clothing",
+            words: [
+                { german: 'Stiefel', english: 'Boots' },
+                { german: 'Sandale', english: 'Sandals' },
+                { german: 'Kopftuch', english: 'Headscarf' },
+                { german: 'Tasche', english: 'Bag' },
+                { german: 'Schal', english: 'Scarf' },
+                { german: 'Handschuh', english: 'Gloves' },
+                { german: 'Unterhemd', english: 'Undershirt' },
+                { german: 'Pullover', english: 'Sweater' },
+                { german: 'Anzug', english: 'Suit' },
+                { german: 'Krawatte', english: 'Tie' },
+                { german: 'Hut', english: 'Hat' },
+                { german: 'Sonnenbrille', english: 'Sunglasses' },
+                { german: 'Armbanduhr', english: 'Watch' },
+                { german: 'Ring', english: 'Ring' },
+                { german: 'Kette', english: 'Necklace' },
+                { german: 'Ohrring', english: 'Earring' },
+                { german: 'Geldbörse', english: 'Wallet' },
+                { german: 'Rucksack', english: 'Backpack' },
+                { german: 'Regenschirm', english: 'Umbrella' },
+                { german: 'Handschuhe', english: 'Gloves' },
+                { german: 'Mütze', english: 'Cap' },
+                { german: 'Schal', english: 'Scarf' },
+                { german: 'Socken', english: 'Socks' },
+                { german: 'Unterwäsche', english: 'Underwear' },
+                { german: 'Bademantel', english: 'Bathrobe' },
+                { german: 'Hausschuhe', english: 'Slippers' },
+                { german: 'Sportschuhe', english: 'Sneakers' },
+                { german: 'Stöckelschuhe', english: 'High heels' },
+                { german: 'Flip-Flops', english: 'Flip-flops' },
+                { german: 'Gürtel', english: 'Belt' },
+                { german: 'Hosenträger', english: 'Suspenders' },
+                { german: 'Krawatte', english: 'Tie' },
+                { german: 'Fliege', english: 'Bow tie' },
+                { german: 'Schmuck', english: 'Jewelry' },
+                { german: 'Armband', english: 'Bracelet' },
+                { german: 'Halskette', english: 'Necklace' },
+                { german: 'Ohrringe', english: 'Earrings' },
+                { german: 'Ring', english: 'Ring' },
+                { german: 'Uhr', english: 'Watch' },
+                { german: 'Brille', english: 'Glasses' },
+                { german: 'Kontaktlinsen', english: 'Contact lenses' }
             ]
         }
     }
@@ -669,7 +735,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     
     document.getElementById('restart-test-btn').addEventListener('click', startTest);
-    document.getElementById('back-to-sections-btn').addEventListener('click', showSectionSelection);
+    
+    // Back to sections button (both in category selection and test results)
+    const backToSectionsBtns = document.querySelectorAll('#back-to-sections-btn');
+    backToSectionsBtns.forEach(btn => {
+        btn.addEventListener('click', showSectionSelection);
+    });
     
     document.getElementById('stats-panel').classList.remove('hidden');
     
