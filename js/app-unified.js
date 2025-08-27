@@ -410,8 +410,22 @@ function selectSection(section) {
 
 // --- CATEGORY MANAGEMENT ---
 function selectCategory(category) {
+    console.log('selectCategory called with:', category);
+    console.log('currentSection:', currentSection);
+    console.log('vocabularyData:', vocabularyData);
+    
     currentCategory = category;
+    
+    // Sicherheitsüberprüfung mit optionaler Verkettung
+    if (!vocabularyData[currentSection] || !vocabularyData[currentSection][category]) {
+        console.error(`Category '${category}' not found in section '${currentSection}'`);
+        console.error('Available sections:', Object.keys(vocabularyData));
+        console.error('Available categories in current section:', vocabularyData[currentSection] ? Object.keys(vocabularyData[currentSection]) : 'undefined');
+        return;
+    }
+    
     currentVocabulary = vocabularyData[currentSection][category].words;
+    console.log('Selected vocabulary:', currentVocabulary);
     
     document.querySelectorAll('.category-btn').forEach(btn => {
         btn.classList.remove('bg-blue-100', 'border-blue-500');
@@ -419,8 +433,10 @@ function selectCategory(category) {
     });
     
     const selectedBtn = document.querySelector(`[data-category="${category}"]`);
-    selectedBtn.classList.remove('bg-white');
-    selectedBtn.classList.add('bg-blue-100', 'border-blue-500');
+    if (selectedBtn) {
+        selectedBtn.classList.remove('bg-white');
+        selectedBtn.classList.add('bg-blue-100', 'border-blue-500');
+    }
     
     document.getElementById('progress-container').classList.remove('hidden');
     document.getElementById('mode-switcher').classList.remove('hidden');
@@ -466,6 +482,13 @@ function updateProgress() {
 function createLearnCards() {
     const wordCardsContainer = document.getElementById('word-cards');
     wordCardsContainer.innerHTML = '';
+    
+    // Sicherheitsüberprüfung für currentVocabulary
+    if (!currentVocabulary || currentVocabulary.length === 0) {
+        console.error('No vocabulary available for current section/category');
+        wordCardsContainer.innerHTML = '<div class="col-span-full text-center text-gray-500">Keine Wörter verfügbar</div>';
+        return;
+    }
     
     currentVocabulary.forEach((word, index) => {
         const cardContainer = document.createElement('div');
@@ -558,6 +581,12 @@ function loadQuestion() {
 
     const correctAnswer = currentLanguage === 'en' ? currentWord.english : currentWord.somali;
     let options = [correctAnswer];
+    
+    // Sicherheitsüberprüfung für vocabularyData
+    if (!vocabularyData[currentSection]) {
+        console.error(`Section '${currentSection}' not found in vocabularyData`);
+        return;
+    }
     
     const allWords = Object.values(vocabularyData[currentSection]).flatMap(cat => cat.words);
     const wrongAnswers = allWords
@@ -737,6 +766,13 @@ function loadProgress() {
 // --- EVENT LISTENERS ---
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM loaded, initializing application...');
+    
+    // Debug: Zeige verfügbare Daten
+    console.log('Available vocabularyData:', vocabularyData);
+    console.log('Available sections:', Object.keys(vocabularyData));
+    Object.keys(vocabularyData).forEach(section => {
+        console.log(`Section '${section}' categories:`, Object.keys(vocabularyData[section]));
+    });
     
     // Check if user has selected a language before
     const savedLanguage = localStorage.getItem('selectedLanguage');
