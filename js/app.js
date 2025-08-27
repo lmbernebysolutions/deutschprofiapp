@@ -55,7 +55,9 @@ let shuffledVocab = [];
 let currentMode = 'learn';
 
 // --- TEXT-TO-SPEECH ---
-function speak(text) {
+let currentSpeechRate = 0.8; // Langsamere Standardgeschwindigkeit
+
+function speak(text, speed = 'normal') {
     if (!window.speechSynthesis) {
         alert("Nidaamka codku kama shaqeynayo biraawsarkan. Fadlan isku day biraawsar kale sida Chrome ama Firefox.");
         return;
@@ -66,18 +68,55 @@ function speak(text) {
     
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = 'de-DE';
-    utterance.rate = 0.9;
-    utterance.pitch = 1.0;
+    
+    // Geschwindigkeit einstellen
+    if (speed === 'slow') {
+        utterance.rate = 0.6; // Sehr langsam
+        currentSpeechRate = 0.6;
+    } else {
+        utterance.rate = 0.9; // Normal
+        currentSpeechRate = 0.9;
+    }
+    
+    utterance.pitch = 0.8; // Etwas tiefer für männlichere Stimme
     utterance.volume = 1.0;
     
-    // Try to get a German voice
+    // Beste männliche deutsche Stimme auswählen
     const voices = window.speechSynthesis.getVoices();
-    const germanVoice = voices.find(voice => voice.lang.startsWith('de'));
-    if (germanVoice) {
-        utterance.voice = germanVoice;
+    let bestVoice = null;
+    
+    // Priorität: Deutsche männliche Stimmen
+    bestVoice = voices.find(voice => 
+        voice.lang.startsWith('de') && 
+        (voice.name.includes('Male') || voice.name.includes('männlich') || voice.name.includes('male'))
+    );
+    
+    // Fallback: Deutsche Stimme
+    if (!bestVoice) {
+        bestVoice = voices.find(voice => voice.lang.startsWith('de'));
+    }
+    
+    // Fallback: Englische männliche Stimme
+    if (!bestVoice) {
+        bestVoice = voices.find(voice => 
+            voice.lang.startsWith('en') && 
+            (voice.name.includes('Male') || voice.name.includes('male'))
+        );
+    }
+    
+    if (bestVoice) {
+        utterance.voice = bestVoice;
     }
     
     window.speechSynthesis.speak(utterance);
+}
+
+function speakSlow(text) {
+    speak(text, 'slow');
+}
+
+function speakNormal(text) {
+    speak(text, 'normal');
 }
 
 // --- LEARN MODE ---
@@ -97,7 +136,10 @@ function createLearnCards() {
         frontFace.className = 'card-face absolute w-full h-full bg-white rounded-xl shadow-md flex flex-col items-center justify-center p-2 text-center';
         frontFace.innerHTML = `
             <p class="text-xl md:text-2xl font-semibold">${word.german}</p>
-            <button class="speak-btn text-3xl mt-2 text-blue-500 hover:text-blue-700 transition" aria-label="Maqal ${word.german}">🔊</button>
+            <div class="flex gap-2 mt-2">
+                <button class="speak-slow-btn text-2xl text-green-500 hover:text-green-700 transition" aria-label="Maqal si tartiib ah ${word.german}" title="Langsam">🐌</button>
+                <button class="speak-normal-btn text-2xl text-blue-500 hover:text-blue-700 transition" aria-label="Maqal caadi ah ${word.german}" title="Normal">🔊</button>
+            </div>
         `;
         
         // Back face (Somali)
@@ -112,9 +154,12 @@ function createLearnCards() {
 
         // Event Listeners for card
         card.addEventListener('click', (e) => {
-            if (e.target.classList.contains('speak-btn')) {
+            if (e.target.classList.contains('speak-slow-btn')) {
                 e.stopPropagation(); // Prevent card flip when speaker is clicked
-                speak(word.german);
+                speakSlow(word.german);
+            } else if (e.target.classList.contains('speak-normal-btn')) {
+                e.stopPropagation(); // Prevent card flip when speaker is clicked
+                speakNormal(word.german);
             } else {
                 card.classList.toggle('is-flipped');
             }
@@ -285,21 +330,25 @@ function loadProgress() {
 }
 
 // --- EVENT LISTENERS ---
-startButton.addEventListener('click', () => {
-    tutorialModal.style.display = 'none';
-    // Load saved progress if available
-    const progress = loadProgress();
-    if (progress && progress.mode === 'test') {
-        switchMode('test');
-    }
-});
+if (startButton) {
+    startButton.addEventListener('click', () => {
+        tutorialModal.style.display = 'none';
+        // Load saved progress if available
+        const progress = loadProgress();
+        if (progress && progress.mode === 'test') {
+            switchMode('test');
+        } else {
+            createLearnCards();
+        }
+    });
+}
 
 learnModeBtn.addEventListener('click', () => switchMode('learn'));
 testModeBtn.addEventListener('click', () => switchMode('test'));
 
 testAudioBtn.addEventListener('click', () => {
     if (shuffledVocab[currentTestIndex]) {
-        speak(shuffledVocab[currentTestIndex].german);
+        speakNormal(shuffledVocab[currentTestIndex].german);
     }
 });
 
@@ -317,6 +366,13 @@ window.addEventListener('beforeunload', saveProgress);
 
 // --- INITIALIZATION ---
 document.addEventListener('DOMContentLoaded', () => {
+    // Initialize speech synthesis first
+    if (window.speechSynthesis) {
+        window.speechSynthesis.onvoiceschanged = () => {
+            // Voices are now available
+        };
+    }
+    
     // Check if user has visited before
     const hasVisited = localStorage.getItem('baroJarmalkaVisited');
     if (hasVisited) {
@@ -332,11 +388,17 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('baroJarmalkaVisited', 'true');
     }
     
-    // Initialize speech synthesis
-    if (window.speechSynthesis) {
-        window.speechSynthesis.onvoiceschanged = () => {
-            // Voices are now available
-        };
+    // Ensure start button is properly initialized
+    if (startButton) {
+        startButton.addEventListener('click', () => {
+            tutorialModal.style.display = 'none';
+            const progress = loadProgress();
+            if (progress && progress.mode === 'test') {
+                switchMode('test');
+            } else {
+                createLearnCards();
+            }
+        });
     }
 });
 
