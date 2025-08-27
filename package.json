@@ -1,0 +1,43 @@
+{
+  "name": "baro-jarmalka",
+  "version": "1.0.0",
+  "description": "Interaktive Lernplattform für deutsche Sprache mit somalischen Übersetzungen",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx http-server -p 3000 -o",
+    "dev": "npx live-server --port=3000 --open=/",
+    "build": "echo 'Static site - no build required'",
+    "test": "echo 'No tests specified'",
+    "lint": "npx eslint js/*.js",
+    "format": "npx prettier --write ."
+  },
+  "keywords": [
+    "deutsch",
+    "somali",
+    "lernen",
+    "sprache",
+    "vokabeln",
+    "interaktiv",
+    "education",
+    "language-learning"
+  ],
+  "author": "Baro Jarmalka Team",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "prettier": "^3.2.5",
+    "http-server": "^14.1.1",
+    "live-server": "^1.2.2"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/baro-jarmalka.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-username/baro-jarmalka/issues"
+  },
+  "homepage": "https://your-username.github.io/baro-jarmalka"
+}
