@@ -52,7 +52,7 @@
         </div>
         
         <!-- Category Selection -->
-        <div id="category-selection" class="mb-8 hidden">
+        <div id="category-selection" class="mb-8">
             <h2 class="text-2xl font-bold text-center mb-6">Dooro Kategoriya / Wähle eine Kategorie</h2>
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
                 <button class="category-btn bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition-all text-center" data-category="haushalt">
@@ -260,6 +260,7 @@
 
         // --- TEXT-TO-SPEECH ---
         let currentSpeechRate = 0.8; // Langsamere Standardgeschwindigkeit
+        let wordTestCount = {}; // Zählt wie oft jedes Wort im Test richtig war
 
         function speak(text, speed = 'normal') {
             if (!window.speechSynthesis) {
@@ -273,34 +274,58 @@
             const utterance = new SpeechSynthesisUtterance(text);
             utterance.lang = 'de-DE';
             
-            // Geschwindigkeit einstellen
+            // Geschwindigkeit einstellen - langsame Stimme noch langsamer
             if (speed === 'slow') {
-                utterance.rate = 0.6; // Sehr langsam
-                currentSpeechRate = 0.6;
+                utterance.rate = 0.4; // Sehr langsam (vorher 0.6)
+                currentSpeechRate = 0.4;
             } else {
                 utterance.rate = 0.9; // Normal
                 currentSpeechRate = 0.9;
             }
             
-            utterance.pitch = 0.8; // Etwas tiefer für männlichere Stimme
+            utterance.pitch = 0.7; // Noch tiefer für bessere männliche Stimme
             utterance.volume = 1.0;
             
-            // Beste männliche deutsche Stimme auswählen
+            // Verbesserte Stimmenauswahl für bessere Verständlichkeit
             const voices = window.speechSynthesis.getVoices();
             let bestVoice = null;
             
-            // Priorität: Deutsche männliche Stimmen
+            // Priorität 1: Deutsche Premium-Stimmen (meist bessere Qualität)
             bestVoice = voices.find(voice => 
                 voice.lang.startsWith('de') && 
-                (voice.name.includes('Male') || voice.name.includes('männlich') || voice.name.includes('male'))
+                (voice.name.includes('Premium') || voice.name.includes('HD') || voice.name.includes('High'))
             );
             
-            // Fallback: Deutsche Stimme
+            // Priorität 2: Deutsche männliche Stimmen
+            if (!bestVoice) {
+                bestVoice = voices.find(voice => 
+                    voice.lang.startsWith('de') && 
+                    (voice.name.includes('Male') || voice.name.includes('männlich') || voice.name.includes('male'))
+                );
+            }
+            
+            // Priorität 3: Deutsche Stimmen mit guter Qualität
+            if (!bestVoice) {
+                bestVoice = voices.find(voice => 
+                    voice.lang.startsWith('de') && 
+                    (voice.name.includes('Anna') || voice.name.includes('Markus') || voice.name.includes('Yannick'))
+                );
+            }
+            
+            // Priorität 4: Deutsche Stimme (beliebige)
             if (!bestVoice) {
                 bestVoice = voices.find(voice => voice.lang.startsWith('de'));
             }
             
-            // Fallback: Englische männliche Stimme
+            // Priorität 5: Englische Premium-Stimmen
+            if (!bestVoice) {
+                bestVoice = voices.find(voice => 
+                    voice.lang.startsWith('en') && 
+                    (voice.name.includes('Premium') || voice.name.includes('HD') || voice.name.includes('High'))
+                );
+            }
+            
+            // Priorität 6: Englische männliche Stimme
             if (!bestVoice) {
                 bestVoice = voices.find(voice => 
                     voice.lang.startsWith('en') && 
@@ -310,7 +335,12 @@
             
             if (bestVoice) {
                 utterance.voice = bestVoice;
+                console.log('Selected voice:', bestVoice.name, 'for language:', bestVoice.lang);
             }
+            
+            // Zusätzliche Verbesserungen für bessere Verständlichkeit
+            utterance.rate = Math.max(0.3, utterance.rate); // Mindestgeschwindigkeit
+            utterance.pitch = Math.max(0.5, utterance.pitch); // Mindesthöhe
             
             window.speechSynthesis.speak(utterance);
         }
@@ -323,12 +353,34 @@
             speak(text, 'normal');
         }
 
+        // Alternative TTS-Lösung mit besserer Qualität
+        function speakWithBetterQuality(text, speed = 'normal') {
+            // Versuche zuerst die verbesserte Web Speech API
+            if (window.speechSynthesis && window.speechSynthesis.getVoices().length > 0) {
+                speak(text, speed);
+                return;
+            }
+            
+            // Fallback: Verwende Google Translate TTS (falls verfügbar)
+            try {
+                const audio = new Audio();
+                const lang = 'de';
+                const rate = speed === 'slow' ? '0.4' : '0.9';
+                audio.src = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(text)}&tl=${lang}&client=tw-ob&ttsspeed=${rate}`;
+                audio.play();
+            } catch (error) {
+                console.error('Google TTS fallback failed:', error);
+                // Letzter Fallback: Verwende Standard-Web Speech API
+                speak(text, speed);
+            }
+        }
+
         // --- CATEGORY MANAGEMENT ---
         function selectCategory(category) {
             currentCategory = category;
             currentVocabulary = vocabularyCategories[category].words;
             
-            // Update UI
+            // Update UI - Kategorieauswahl bleibt immer sichtbar
             document.querySelectorAll('.category-btn').forEach(btn => {
                 btn.classList.remove('bg-blue-100', 'border-blue-500');
                 btn.classList.add('bg-white');
@@ -338,8 +390,7 @@
             selectedBtn.classList.remove('bg-white');
             selectedBtn.classList.add('bg-blue-100', 'border-blue-500');
             
-            // Show progress and mode switcher
-            document.getElementById('category-selection').classList.add('hidden');
+            // Show progress and mode switcher (Kategorieauswahl bleibt sichtbar)
             document.getElementById('progress-container').classList.remove('hidden');
             document.getElementById('mode-switcher').classList.remove('hidden');
             
@@ -354,7 +405,7 @@
         }
 
         function showCategorySelection() {
-            document.getElementById('category-selection').classList.remove('hidden');
+            // Kategorieauswahl ist immer sichtbar, nur andere Bereiche verstecken
             document.getElementById('progress-container').classList.add('hidden');
             document.getElementById('mode-switcher').classList.add('hidden');
             document.getElementById('learn-mode').classList.add('hidden');
@@ -403,10 +454,11 @@
                 frontFace.innerHTML = `
                     <p class="text-lg md:text-xl font-semibold">${word.german}</p>
                     <div class="flex gap-1 mt-1">
-                        <button class="speak-slow-btn text-xl text-green-500 hover:text-green-700 transition" aria-label="Maqal si tartiib ah ${word.german}" title="Langsam">🐌</button>
+                        <button class="speak-slow-btn text-xl text-green-500 hover:text-green-700 transition" aria-label="Maqal si tartiib ah ${word.german}" title="Sehr langsam">🐌</button>
                         <button class="speak-normal-btn text-xl text-blue-500 hover:text-blue-700 transition" aria-label="Maqal caadi ah ${word.german}" title="Normal">🔊</button>
                     </div>
-                    ${isLearned ? '<div class="text-green-500 text-sm mt-1">✓ Gelernt</div>' : ''}
+                    ${isLearned ? '<div class="text-green-500 text-sm mt-1">✓ Gelernt (5x richtig)</div>' : 
+                      wordTestCount[word.german] ? `<div class="text-blue-500 text-sm mt-1">${wordTestCount[word.german]}/5 richtig</div>` : ''}
                 `;
                 
                 // Back face (Somali)
@@ -423,18 +475,14 @@
                 card.addEventListener('click', (e) => {
                     if (e.target.classList.contains('speak-slow-btn')) {
                         e.stopPropagation();
-                        speakSlow(word.german);
+                        speak(word.german, 'slow');
                     } else if (e.target.classList.contains('speak-normal-btn')) {
                         e.stopPropagation();
-                        speakNormal(word.german);
+                        speak(word.german, 'normal');
                     } else {
                         card.classList.toggle('is-flipped');
-                        // Mark as learned when flipped
-                        if (card.classList.contains('is-flipped')) {
-                            learnedWords.add(word.german);
-                            updateProgress();
-                            saveProgress();
-                        }
+                        // Wörter werden NICHT mehr als gelernt markiert beim Aufdecken
+                        // Nur noch beim Testen mit mindestens 5x richtig
                     }
                 });
                 
@@ -443,11 +491,7 @@
                     if (e.key === 'Enter' || e.key === ' ') {
                         e.preventDefault();
                         card.classList.toggle('is-flipped');
-                        if (card.classList.contains('is-flipped')) {
-                            learnedWords.add(word.german);
-                            updateProgress();
-                            saveProgress();
-                        }
+                        // Wörter werden NICHT mehr als gelernt markiert beim Aufdecken
                     }
                 });
             });
@@ -521,6 +565,19 @@
 
             if (selectedAnswer === correctAnswer) {
                 score++;
+                
+                // Zähle wie oft dieses Wort richtig war
+                const currentWord = shuffledVocab[currentTestIndex];
+                if (currentWord) {
+                    wordTestCount[currentWord.german] = (wordTestCount[currentWord.german] || 0) + 1;
+                    
+                    // Markiere als gelernt wenn mindestens 5x richtig
+                    if (wordTestCount[currentWord.german] >= 5) {
+                        learnedWords.add(currentWord.german);
+                        console.log(`Wort "${currentWord.german}" als gelernt markiert (${wordTestCount[currentWord.german]}x richtig)`);
+                    }
+                }
+                
                 document.getElementById('test-feedback').textContent = 'Sax! 👍';
                 document.getElementById('test-feedback').className = 'mt-6 text-center font-bold h-6 text-green-600';
                 button.classList.remove('bg-slate-100');
@@ -572,12 +629,8 @@
             
             document.getElementById('results-text').textContent = resultMessage;
             
-            // Mark words as learned based on test performance
-            shuffledVocab.forEach(word => {
-                if (percentage >= 70) {
-                    learnedWords.add(word.german);
-                }
-            });
+            // Wörter werden nur als gelernt markiert wenn sie 5x richtig waren (nicht mehr hier)
+            // Das passiert jetzt in checkAnswer() für jedes einzelne Wort
             
             updateProgress();
             saveProgress();
@@ -615,6 +668,7 @@
                 category: currentCategory,
                 learnedWords: Array.from(learnedWords),
                 testHistory: testHistory,
+                wordTestCount: wordTestCount,
                 lastPlayed: new Date().toISOString()
             };
             localStorage.setItem('baroJarmalkaProgress', JSON.stringify(progress));
@@ -629,6 +683,7 @@
                     currentCategory = progress.category || 'haushalt';
                     learnedWords = new Set(progress.learnedWords || []);
                     testHistory = progress.testHistory || [];
+                    wordTestCount = progress.wordTestCount || {};
                     currentVocabulary = vocabularyCategories[currentCategory].words;
                     return progress;
                 } catch (e) {
@@ -677,7 +732,7 @@
             // Test audio button
             document.getElementById('test-audio-btn').addEventListener('click', () => {
                 if (shuffledVocab[currentTestIndex]) {
-                    speakNormal(shuffledVocab[currentTestIndex].german);
+                    speak(shuffledVocab[currentTestIndex].german, 'normal');
                 }
             });
             
